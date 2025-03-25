@@ -3,18 +3,24 @@
 class Produto 
 {
     private int $id;
-    private string $name;
-    private string $description;
+    
+    private string $tipo;
+    
+    private string $nome;
+    
+    private string $descricao;
+    
     private string $imagem;
-    private float $price;
-
-    public function __construct(int $id, string $name, string $description, string $imagem, $price)
+    private float $preco;
+    
+    public function __construct(int $id, string $tipo, string $nome, string $descricao, string $imagem, float $preco)
     {
         $this->id = $id;
-        $this->name = $name;
-        $this->description = $description;
+        $this->tipo = $tipo;
+        $this->nome = $nome;
+        $this->descricao = $descricao;
         $this->imagem = $imagem;
-        $this->price = $price;
+        $this->preco = $preco;
     }
 
     public function getId(): int
@@ -22,14 +28,19 @@ class Produto
         return $this->id;
     }
 
-    public function getName(): string
+    public function getTipo(): string
     {
-        return $this->name;
+        return $this->tipo;
     }
 
-    public function getDescription(): string
+    public function getNome(): string
     {
-        return $this->description;  
+        return $this->nome;
+    }
+
+    public function getDescricao(): string
+    {
+        return $this->descricao;
     }
 
     public function getImagem(): string
@@ -37,8 +48,18 @@ class Produto
         return $this->imagem;
     }
 
-    public function getPrice():float
+    public function getPreco(): float
     {
-        return $this->price;
+        return $this->preco;
+    }
+
+    public function getPrecoFormatado():string
+    {
+        return "R$ " . number_format($this->preco, 2);
+    }
+
+    public function getImagemDiretorio(): string
+    {
+        return "img/".$this->imagem;
     }
 }
