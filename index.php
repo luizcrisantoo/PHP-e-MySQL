@@ -1,9 +1,25 @@
 <?php
 
-    require_once "src/conexao-bd.php";
+    require  "src/conexao-bd.php";
+    require "src/Modelo/Produto.php";
+
     $sql1 = "SELECT * FROM produtos WHERE tipo = 'Café' ORDER BY preco";
     $statement = $pdo->query($sql1);
     $produtosCafe = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+    $dadosCafe = array_map(function ($cafe){
+        return new Produto($cafe['id'],
+            $cafe['tipo'],
+            $cafe['nome'],
+            $cafe['descricao'],
+            $cafe['imagem'],
+            $cafe['preco']
+        );
+    }, $produtosCafe);
+
+    var_dump($dadosCafe);
+    exit();
 
     $sql2 = "SELECT * FROM produtos WHERE tipo = 'Almoço' ORDER BY preco";
     $statement = $pdo->query($sql2);
@@ -39,7 +55,7 @@
                 <img class= "ornaments" src="img/ornaments-coffee.png" alt="ornaments">
             </div>
             <div class="container-cafe-manha-produtos">
-                <?php foreach ($produtosCafe as $cafe):?>
+                <?php foreach ($dadosCafe as $cafe):?>
                 <div class="container-produto">
                     <div class="container-foto">
                         <img src="<?= "img/" . $cafe['imagem'] ?>">
