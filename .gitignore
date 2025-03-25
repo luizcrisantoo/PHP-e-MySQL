@@ -1,0 +1,20 @@
+# Arquivos de ambiente
+.env
+
+# Dependências do Composer
+/vendor
+
+# Cache do Composer
+composer.lock
+
+# Arquivos do VS Code
+.vscode/
+*.code-workspace
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Logs e arquivos temporários
+*.log
+*.tmp
