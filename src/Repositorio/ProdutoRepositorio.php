@@ -12,6 +12,18 @@ class ProdutoRepositorio
         $this->pdo = $pdo;
     }
 
+    private function formarObjeto($dados)
+    {
+        return new Produto($dados['id'],
+                $dados['tipo'],
+                $dados['nome'],
+                $dados['descricao'],
+                $dados['imagem'],
+                $dados['preco']
+            );
+    }
+
+
     public function opcoesCafe(): array
     {
         $sql1 = "SELECT * FROM produtos WHERE tipo = 'Café' ORDER BY preco";
@@ -20,13 +32,7 @@ class ProdutoRepositorio
 
 
         $dadosCafe = array_map(function ($cafe){
-            return new Produto($cafe['id'],
-                $cafe['tipo'],
-                $cafe['nome'],
-                $cafe['descricao'],
-                $cafe['imagem'],
-                $cafe['preco']
-            );
+            return $this->formarObjeto($cafe);
         }, $produtosCafe);
 
         return $dadosCafe;
@@ -39,15 +45,33 @@ class ProdutoRepositorio
             $produtosAlmoco = $statement->fetchAll(PDO::FETCH_ASSOC);
 
             $dadosAlmoco = array_map(function ($almoco) {
-                return new Produto($almoco['id'],
-                    $almoco['tipo'],
-                    $almoco['nome'],
-                    $almoco['descricao'],
-                    $almoco['imagem'],
-                    $almoco['preco']
-                );
-            }, $produtosAlmoco);
+               return $this->formarObjeto($almoco);
+            },$produtosAlmoco);
 
             return $dadosAlmoco;
+        }
+
+        public function buscarTodos()
+        {
+            $sql = "SELECT * FROM produtos ORDER BY preco";
+            $statement = $this->pdo->query($sql);
+            $dados = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            
+            $todosOSDados = array_map(function ($produto) {
+                return $this->formarObjeto($produto);
+             },$dados);
+
+             return $todosOSDados;
+ 
+        }
+
+        public function deletar(int $id)
+        {
+            $sql = "DELETE FROM produtos WHERE id = ?";
+            $statement = $this->pdo->prepare($sql);
+            $statement->bindValue(1, $id);
+            $statement->execute();
+
         }
 }
