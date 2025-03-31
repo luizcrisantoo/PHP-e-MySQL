@@ -7,7 +7,7 @@
         
     $produtoRepositorio = new ProdutoRepositorio($pdo);
     $produto = $produtoRepositorio->buscar($_GET['id']);
-?>
+
 ?>
 
 <!doctype html>
