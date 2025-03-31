@@ -6,7 +6,22 @@
         
         
     $produtoRepositorio = new ProdutoRepositorio($pdo);
-    $produto = $produtoRepositorio->buscar($_GET['id']);
+
+    if(isset($_POST["editar"]))
+    {
+      $produto = new Produto($_POST['id'], $_POST['tipo'],$_POST['nome'] ,$_POST['descricao'], $_POST['preco']);
+
+      if(isset($_FILES['imagem']))
+      {
+          $produto->setImagem(uniqid().$_FILES['imagem']['name']);
+          move_uploaded_file($_FILES['imagem']['tmp_name'],$produto->getImagemDiretorio());
+      }
+
+      $produtoRepositorio->atualizar($produto);
+      header("Location: admin.php");
+    }else {
+      $produto = $produtoRepositorio->buscar($_GET['id']);
+    }
 
 ?>
 
@@ -56,7 +71,7 @@
       <input type="text" name="descricao" id="descricao" value="<?= $produto->getDescricao()?>" placeholder="Digite uma descrição" required>
 
       <label for="preco">Preço</label>
-      <input type="text" name="preco" id="preco" value="<?= $produto->getPrecoFormatado()?>" placeholder="Digite uma descrição" required>
+      <input type="text" name="preco" id="preco" value="<?= number_format($produto->getPreco(), 2)?>" placeholder="Digite uma descrição" required>
 
       <label for="imagem">Envie uma imagem do produto</label>
       <input type="file" name="imagem" accept="image/*" id="imagem" placeholder="Envie uma imagem">
